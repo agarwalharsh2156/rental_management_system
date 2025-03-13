@@ -1,0 +1,10 @@
+<h2>Your Notifications</h2>
+{% if notifications %}
+    <ul>
+        {% for notification in notifications %}
+            <li>{{ notification.message }} ({{ notification.created_at|date:"d M Y H:i" }})</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No notifications yet.</p>
+{% endif %}
