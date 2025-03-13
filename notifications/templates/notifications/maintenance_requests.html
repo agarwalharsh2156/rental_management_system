@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-top: 20px; padding: 20px; font-family: Arial, sans-serif; color: #333;">
+    <h2 style="margin-bottom: 20px; font-size: 24px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">Maintenance Notifications</h2>
+    
+    {% for request in maintenance_requests %}
+        <div style="
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #fafafa;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            transition: transform 0.2s ease-in-out;
+        " onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+            <p style="font-size: 16px; margin-bottom: 8px;">
+                <strong>Message:</strong> Maintenance request for 
+                <strong style="color: #007bff;">{{ request.property.name }}</strong> 
+                by <strong style="color: #28a745;">{{ request.tenant.username }}</strong>.
+            </p>
+            
+            <p style="font-size: 14px; margin-bottom: 12px;">
+                <strong>Status:</strong>
+                {% if request.status == 'Pending' %}
+                    <span style="
+                        color: #856404;
+                        background-color: #fff3cd;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        font-size: 14px;
+                        display: inline-block;
+                    ">{{ request.status }}</span>
+                {% elif request.status == 'Approved' %}
+                    <span style="
+                        color: #155724;
+                        background-color: #d4edda;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        font-size: 14px;
+                        display: inline-block;
+                    ">{{ request.status }}</span>
+                {% else %}
+                    <span style="
+                        color: #721c24;
+                        background-color: #f8d7da;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        font-size: 14px;
+                        display: inline-block;
+                    ">{{ request.status }}</span>
+                {% endif %}
+            </p>
+
+            {% if request.status == 'Pending' and user == request.property.owner %}
+                <div style="margin-top: 12px;">
+                    <a href="{% url 'notifications:approve_maintenance' request.id %}" style="
+                        display: inline-block;
+                        text-align: center;
+                        background-color: #28a745;
+                        color: white;
+                        padding: 10px 20px;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        margin-right: 8px;
+                        font-size: 14px;
+                        transition: background-color 0.2s ease-in-out;
+                    " onmouseover="this.style.backgroundColor='#218838'" onmouseout="this.style.backgroundColor='#28a745'">Approve</a>
+
+                    <a href="{% url 'notifications:reject_maintenance' request.id %}" style="
+                        display: inline-block;
+                        text-align: center;
+                        background-color: #dc3545;
+                        color: white;
+                        padding: 10px 20px;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        font-size: 14px;
+                        transition: background-color 0.2s ease-in-out;
+                    " onmouseover="this.style.backgroundColor='#c82333'" onmouseout="this.style.backgroundColor='#dc3545'">Reject</a>
+                </div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p style="color: #888; font-size: 16px;">No maintenance notifications available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

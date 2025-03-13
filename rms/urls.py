@@ -26,12 +26,15 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
+    
     path('superadmin/', include(Superadmin.urls)),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('real_estate/', include(RealEstate.urls)), 
     path('accounts/', include(accounts.urls)),
+    path('notifications/', include('notifications.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),  # Add this line
 ]
 
 if settings.DEBUG:
- urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
